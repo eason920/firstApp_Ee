@@ -1,49 +1,32 @@
 import React, { useState } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-} from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 
 const App = () => {
-  const [alignItems, setAlignItems] = useState("stretch");
-
+  // const alignItems = "center";
+  const [alignItems, setAlignItems] = useState("center");
+  const [vv, setVv] = useState("def vv");
   return (
-    <PreviewLayout
+    <Component
       propsProperty="alignItems"
-      propsKeys={[
-        "flex-start",
-        "flex-end",
-        "baseline",
-        "auto",
-        "center",
-        "stretch",
-      ]}
+      propsKeys={["flex-start", "center", "flex-end"]}
       propsKey={alignItems}
       propsFn={setAlignItems}
     >
-      <View
-        style={[styles.cssChildren, { backgroundColor: "powderblue" }]}
-      />
-      <View
-        style={[styles.cssChildren, { backgroundColor: "skyblue" }]}
-      />
-      <View
-        style={[
-          styles.cssChildren,
-          {
-            backgroundColor: "steelblue",
-            width: "auto",
-            minWidth: 50,
-          },
-        ]}
-      />
-    </PreviewLayout>
+      <View style={[styles.cssChildren, { backgroundColor: "red" }]} />
+      <View style={[styles.cssChildren, { backgroundColor: "green" }]} />
+      <View style={[styles.cssChildren, { backgroundColor: "blue" }]} />
+      <TouchableOpacity onPress={() => setVv(1)}>
+        <Text>11111111</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => setVv(2)}>
+        <Text>22222222</Text>
+      </TouchableOpacity>
+      <Text>{vv}</Text>
+    </Component>
   );
 };
 
-const PreviewLayout = ({
+const Component = ({
   propsProperty,
   propsKeys,
   propsKey,
@@ -51,22 +34,17 @@ const PreviewLayout = ({
   children,
 }) => (
   <View style={{ flex: 1, marginTop: 200 }}>
-    {/* UI:LABEL */}
     <View style={styles.cssRow}>
       {propsKeys.map((item) => (
         <TouchableOpacity
           key={item}
           onPress={() => propsFn(item)}
-          style={[
-            styles.cssLabel,
-            propsKey === item && styles.cssLabelOn,
-          ]}
+          style={[styles.cssLabel, propsKey === item && styles.cssLabelOn]}
         >
           <Text
             style={[
               styles.cssLabelText,
-              propsKey === item &&
-                styles.cssLabelTextOn,
+              propsKey === item && styles.cssLabelTextOn,
             ]}
           >
             {item}
@@ -74,13 +52,7 @@ const PreviewLayout = ({
         </TouchableOpacity>
       ))}
     </View>
-    {/* UI:FLEX BOX */}
-    <View
-      style={[
-        styles.container,
-        { [propsProperty]: propsKey },
-      ]}
-    >
+    <View style={[styles.container, { [propsProperty]: propsKey }]}>
       {children}
     </View>
   </View>

@@ -8,10 +8,12 @@ import {
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
+  Image,
 } from "react-native";
 
 const fnColor = (persent) => {
-  return "hsl(190, 80%, " + persent + "%)";
+  return "hsl(60, 80%, " + persent + "%)";
+  // 0 red / 120 green /  240 blue
 };
 
 export default function App() {
@@ -26,24 +28,40 @@ export default function App() {
   };
   //
   const [sin, setSin] = useState("");
-  const [tf, setTf] = useState("錯誤");
   const fnSetSin = (text) => {
     setSin(text);
-    setTf(text === "1100130" ? "正確 ~" : "錯誤");
   };
+  //
+  const fnCheck = () => {
+    if (sin !== "") {
+      const tf = sin === "1100130" ? "正確~" : "錯誤,您輸入的是" + sin;
+      alert("輸入" + tf);
+    } else {
+      alert("請輸入密碼");
+    }
+  };
+  //
+  const [num, setNum] = useState(0);
   //
   const [page1, setPage1] = useState("flex");
   const [page2, setPage2] = useState("none");
+  const [page3, setPage3] = useState("none");
   const fnSetPage = (page) => {
     switch (page) {
       case 1:
         setPage1("flex");
         setPage2("none");
+        setPage3("none");
         break;
       case 2:
         setPage1("none");
         setPage2("flex");
+        setPage3("none");
         break;
+      case 3:
+        setPage1("none");
+        setPage2("none");
+        setPage3("flex");
       default:
     }
   };
@@ -63,20 +81,53 @@ export default function App() {
           style={[styles.thl, styles.touchShare]}
           onPress={() => fnSetWho("touchablehighlight")}
         >
-          <Text style={[styles.thlText, styles.touchShareText]}>THL</Text>
+          <View style={[styles.iconTextBox]}>
+            <Image
+              style={[styles.icon]}
+              source={{
+                uri: "https://cdn-icons-png.flaticon.com/512/2107/2107957.png",
+              }}
+            />
+            <Text style={[styles.thlText, styles.touchShareText]}>THL</Text>
+          </View>
         </TouchableHighlight>
         <TouchableOpacity
           style={[styles.to, styles.touchShare]}
           onPress={() => fnSetWho("touchableOpacity")}
         >
-          <Text style={[styles.toText, styles.touchShareText]}>TO</Text>
+          <View style={[styles.iconTextBox]}>
+            <Image
+              style={[styles.icon]}
+              source={require("./src/images/star.png")}
+            />
+            <Text style={[styles.toText, styles.touchShareText]}>TO</Text>
+          </View>
         </TouchableOpacity>
       </View>
 
-      {/* PAGE 2 : CelebrateDate */}
+      {/* PAGE 2 : Counter */}
       <View style={styles.page} display={page2}>
+        <View style={styles.countBox}>
+          <TouchableHighlight
+            style={[styles.thl, styles.touchShare]}
+            onPress={() => setNum(num + 1)}
+          >
+            <Text style={[styles.thlText, styles.touchShareText]}>+1</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={[styles.thl, styles.touchShare]}
+            onPress={() => setNum(0)}
+          >
+            <Text style={[styles.thlText, styles.touchShareText]}>clean</Text>
+          </TouchableHighlight>
+        </View>
+        <Text style={[{ fontSize: 20, marginTop: 10 }]}>now is {num}</Text>
+      </View>
+
+      {/* PAGE 3 : CelebrateDate */}
+      <View style={styles.page} display={page3}>
         <TextInput
-          style={[{ backgroundColor: fnColor(30) }, styles.txtIpt]}
+          style={[{ backgroundColor: fnColor(35) }, styles.txtIpt]}
           onChangeText={(text) => fnSetSin(text)}
           value={sin}
           keyboardType={"numeric"}
@@ -86,9 +137,15 @@ export default function App() {
           editable={true}
           autoFocus={false}
         />
-        <Text style={styles.secure}>輸入的是「{sin}」</Text>
-        <Text style={{ fontSize: 20, color: fnColor(20) }}>密碼{tf}</Text>
+        <TouchableHighlight
+          style={[styles.thl, styles.touchShare]}
+          onPress={() => fnCheck()}
+        >
+          <Text style={[styles.thlText, styles.touchShareText]}>確認密碼</Text>
+        </TouchableHighlight>
       </View>
+
+      {/* NAV BAR */}
       <View style={styles.navBar}>
         <TouchableOpacity
           style={[styles.navBarItem]}
@@ -99,6 +156,12 @@ export default function App() {
         <TouchableOpacity
           style={[styles.navBarItem]}
           onPress={() => fnSetPage(2)}
+        >
+          <Text style={[styles.navBarItemText]}>Counter</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.navBarItem]}
+          onPress={() => fnSetPage(3)}
         >
           <Text style={[styles.navBarItemText]}>CelebrateDate</Text>
         </TouchableOpacity>
@@ -130,7 +193,7 @@ const styles = StyleSheet.create({
   // BUTTON 1
   buttonView: {
     backgroundColor: fnColor(70),
-    width: "30%",
+    width: "48%",
     height: 60,
     borderRadius: 10,
     paddingTop: 10,
@@ -147,13 +210,14 @@ const styles = StyleSheet.create({
   // BUTTON 2 : TouchableHighlight & TouchableOpacity
   touchShare: {
     height: 60,
-    width: "30%",
+    width: "48%",
     borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
   },
   touchShareText: {
     textAlign: "center",
     fontSize: 20,
-    paddingTop: 15,
   },
   //
   thl: {
@@ -168,6 +232,16 @@ const styles = StyleSheet.create({
   },
   toText: {
     color: fnColor(80),
+  },
+  iconTextBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  icon: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
   },
   // INPUT
   txtIpt: {
@@ -184,9 +258,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
   },
-  secure: {
-    color: fnColor(20),
-    fontSize: 10,
+  // COUNT
+  countBox: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    paddingLeft: "5%",
+    paddingRight: "5%",
   },
   // PAGE
   page: {
@@ -212,7 +290,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   navBarItemText: {
-    fontSize: 20,
+    fontSize: 14,
     color: "#fff",
   },
 });
