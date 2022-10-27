@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 const fnColor = (persent) => {
-  return "hsl(60, 80%, " + persent + "%)";
+  return "hsl(0, 60%, " + persent + "%)";
   // 0 red / 120 green /  240 blue
 };
 
@@ -42,29 +42,38 @@ export default function App() {
   };
   //
   const [num, setNum] = useState(0);
+  const fnSetNumAdd = ()=> {
+    setNum(num + 1);
+  }
+  const fnSetNumClean = ()=> {
+    setNum(168);
+  }
   //
+  const [nowPage, setNowPage] = useState("About US");
   const [page1, setPage1] = useState("flex");
   const [page2, setPage2] = useState("none");
   const [page3, setPage3] = useState("none");
   const fnSetPage = (page) => {
     switch (page) {
-      case 1:
+      case "About US":
         setPage1("flex");
         setPage2("none");
         setPage3("none");
         break;
-      case 2:
+      case "Counter":
         setPage1("none");
         setPage2("flex");
         setPage3("none");
         break;
-      case 3:
+      case "CelebrateDate":
         setPage1("none");
         setPage2("none");
         setPage3("flex");
       default:
     }
+    setNowPage(page);
   };
+
   return (
     <View style={styles.container}>
       {/* PAGE 1 : About US */}
@@ -77,20 +86,17 @@ export default function App() {
             style={[styles.button, { color: "#333" }, styles.text]}
           />
         </View>
-        <TouchableHighlight
-          style={[styles.thl, styles.touchShare]}
-          onPress={() => fnSetWho("touchablehighlight")}
+        <CpnTHL
+          propsText={"CpnTHL"}
+          propsFn={fnSetWho}
         >
-          <View style={[styles.iconTextBox]}>
-            <Image
-              style={[styles.icon]}
-              source={{
-                uri: "https://cdn-icons-png.flaticon.com/512/2107/2107957.png",
-              }}
-            />
-            <Text style={[styles.thlText, styles.touchShareText]}>THL</Text>
-          </View>
-        </TouchableHighlight>
+          <Image
+            style={[styles.icon]}
+            source={{
+              uri: "https://cdn-icons-png.flaticon.com/512/2107/2107957.png",
+            }}
+          />
+        </CpnTHL>
         <TouchableOpacity
           style={[styles.to, styles.touchShare]}
           onPress={() => fnSetWho("touchableOpacity")}
@@ -108,18 +114,14 @@ export default function App() {
       {/* PAGE 2 : Counter */}
       <View style={styles.page} display={page2}>
         <View style={styles.countBox}>
-          <TouchableHighlight
-            style={[styles.thl, styles.touchShare]}
-            onPress={() => setNum(num + 1)}
-          >
-            <Text style={[styles.thlText, styles.touchShareText]}>+1</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={[styles.thl, styles.touchShare]}
-            onPress={() => setNum(0)}
-          >
-            <Text style={[styles.thlText, styles.touchShareText]}>clean</Text>
-          </TouchableHighlight>
+          <CpnTHL
+            propsText={"+1"}
+            propsFn={fnSetNumAdd}
+          />
+          <CpnTHL
+            propsText={"clean"}
+            propsFn={fnSetNumClean}
+          />
         </View>
         <Text style={[{ fontSize: 20, marginTop: 10 }]}>now is {num}</Text>
       </View>
@@ -137,39 +139,60 @@ export default function App() {
           editable={true}
           autoFocus={false}
         />
-        <TouchableHighlight
-          style={[styles.thl, styles.touchShare]}
-          onPress={() => fnCheck()}
+        <CpnTHL
+          propsText={"確認密碼"}
+          propsFn={fnCheck}
         >
-          <Text style={[styles.thlText, styles.touchShareText]}>確認密碼</Text>
-        </TouchableHighlight>
+          <Image
+            style={[styles.icon]}
+            source={require("./src/images/heart.png")}
+          />
+        </CpnTHL>
       </View>
 
       {/* NAV BAR */}
-      <View style={styles.navBar}>
-        <TouchableOpacity
-          style={[styles.navBarItem]}
-          onPress={() => fnSetPage(1)}
-        >
-          <Text style={[styles.navBarItemText]}>About US</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.navBarItem]}
-          onPress={() => fnSetPage(2)}
-        >
-          <Text style={[styles.navBarItemText]}>Counter</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.navBarItem]}
-          onPress={() => fnSetPage(3)}
-        >
-          <Text style={[styles.navBarItemText]}>CelebrateDate</Text>
-        </TouchableOpacity>
-      </View>
+      <CpnNavBar
+        propsKeys={["About US", "Counter", "CelebrateDate"]}
+        propsKey={nowPage}
+        propsFn={fnSetPage}
+      />
       <StatusBar style="auto" />
     </View>
   );
 }
+
+const CpnTHL = ({ propsFn, propsText, children }) => (
+  <TouchableHighlight
+    style={[styles.thl, styles.touchShare]}
+    onPress={() => propsFn("touched THL CPN")}
+  >
+    <View style={[styles.iconTextBox]}>
+      {children}
+      <Text style={[styles.thlText, styles.touchShareText]}>{propsText}</Text>
+    </View>
+  </TouchableHighlight>
+);
+
+const CpnNavBar = ({ propsKeys, propsKey, propsFn }) => (
+  <View style={styles.navBar}>
+    {propsKeys.map((item) => (
+      <TouchableOpacity
+        key={item}
+        style={[styles.navBarItem]}
+        onPress={() => propsFn(item)}
+      >
+        <Text
+          style={[
+            styles.navBarItemText,
+            propsKey === item && styles.navBarItemTextOn,
+          ]}
+        >
+          {item}
+        </Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+);
 
 const styles = StyleSheet.create({
   // STRUCTURE
@@ -292,5 +315,8 @@ const styles = StyleSheet.create({
   navBarItemText: {
     fontSize: 14,
     color: "#fff",
+  },
+  navBarItemTextOn: {
+    color: fnColor(50),
   },
 });

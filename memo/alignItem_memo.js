@@ -1,6 +1,16 @@
 const Component = ({}) => (); // 箭頭右方為小括
 <View>{mapHere}</View> // {} 可帶變數,函式也須看作變數,用大括包
+
+// .map
 propsKey.map((item)=>()); // map 的箭頭右方為小括
+
+// .map 要加入保留字「key」
+{propsKeys.map((item) => (
+  <TouchableOpacity
+    key={item}
+  />
+))}
+// end
 
 // 屬性用作變數時, 以中括打包使用
 style={[{text: "center"}]}
