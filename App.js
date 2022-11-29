@@ -1,20 +1,26 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import {
-  StyleSheet,
   Text,
   View,
   Button,
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
   Image,
 } from "react-native";
 
-const fnColor = (persent) => {
-  return "hsl(0, 60%, " + persent + "%)";
-  // 0 red / 120 green /  240 blue
-};
+// StyleSheet
+import fnColor from "./src/styles/fnColor";
+import styles from "./src/styles/basic";
+import stylesButton from "./src/styles/button";
+
+// Component
+import {
+  CpnTouchableHeightLight,
+  CpnTouchableHeightLightMultProps,
+  CpnTouchableOpacityMultProps,
+} from "./src/components/Button/MyButton";
+import CpnNavBar from "./src/components/Public/CpnNavBar";
 
 export default function App() {
   const lover = {
@@ -42,12 +48,12 @@ export default function App() {
   };
   //
   const [num, setNum] = useState(0);
-  const fnSetNumAdd = ()=> {
+  const fnSetNumAdd = () => {
     setNum(num + 1);
-  }
-  const fnSetNumClean = ()=> {
+  };
+  const fnSetNumClean = () => {
     setNum(168);
-  }
+  };
   //
   const [nowPage, setNowPage] = useState("About US");
   const [page1, setPage1] = useState("flex");
@@ -79,48 +85,73 @@ export default function App() {
       {/* PAGE 1 : About US */}
       <View style={styles.page} display={page1}>
         <Text style={[styles.text]}>{who}</Text>
-        <View style={[styles.buttonView]}>
+        <View style={[stylesButton.buttonView]}>
           <Button
             title="COUPLE"
             onPress={() => fnSetWho("button")}
-            style={[styles.button, { color: "#333" }, styles.text]}
+            style={[stylesButton.button, { color: "#333" }, styles.text]}
           />
         </View>
-        <CpnTHL
-          propsText={"CpnTHL"}
+
+        {/* HIGHT-LIGHT */}
+        <CpnTouchableHeightLight
+          myText={"CpnTouchableHeightLight"}
+          myOnPress={() => fnSetWho(123)}
+          myKey={20}
+          myProperty2={"backgroundColor"}
+          myKey2={"greenyellow"}
+        />
+        <CpnTouchableHeightLightMultProps
+          propsText={"CpnTouchableHeightLightMultProps"}
           propsFn={fnSetWho}
         >
           <Image
-            style={[styles.icon]}
+            style={[stylesButton.icon]}
             source={{
               uri: "https://cdn-icons-png.flaticon.com/512/2107/2107957.png",
             }}
           />
-        </CpnTHL>
+        </CpnTouchableHeightLightMultProps>
+
+        {/* OPACITY */}
         <TouchableOpacity
-          style={[styles.to, styles.touchShare]}
+          style={[stylesButton.to, stylesButton.touchShare]}
           onPress={() => fnSetWho("touchableOpacity")}
         >
-          <View style={[styles.iconTextBox]}>
+          <View style={[stylesButton.iconTextBox]}>
             <Image
-              style={[styles.icon]}
+              style={[stylesButton.icon]}
               source={require("./src/images/star.png")}
             />
-            <Text style={[styles.toText, styles.touchShareText]}>TO</Text>
+            <Text style={[stylesButton.toText, stylesButton.touchShareText]}>
+              TouchableOpacity (not cpn)
+            </Text>
           </View>
         </TouchableOpacity>
+        {/**/}
+        <CpnTouchableOpacityMultProps propsFn={fnSetWho}>
+          <Image
+            style={[stylesButton.icon]}
+            source={require("./src/images/star.png")}
+          />
+          <Text style={[stylesButton.toText, stylesButton.touchShareText]}>
+            CpnTouchableOpacityMultProps
+          </Text>
+        </CpnTouchableOpacityMultProps>
       </View>
 
       {/* PAGE 2 : Counter */}
       <View style={styles.page} display={page2}>
         <View style={styles.countBox}>
-          <CpnTHL
+          <CpnTouchableHeightLightMultProps
             propsText={"+1"}
             propsFn={fnSetNumAdd}
+            propsWidth={"48%"}
           />
-          <CpnTHL
+          <CpnTouchableHeightLightMultProps
             propsText={"clean"}
             propsFn={fnSetNumClean}
+            propsWidth={"48%"}
           />
         </View>
         <Text style={[{ fontSize: 20, marginTop: 10 }]}>now is {num}</Text>
@@ -139,15 +170,15 @@ export default function App() {
           editable={true}
           autoFocus={false}
         />
-        <CpnTHL
+        <CpnTouchableHeightLightMultProps
           propsText={"確認密碼"}
           propsFn={fnCheck}
         >
           <Image
-            style={[styles.icon]}
+            style={[stylesButton.icon]}
             source={require("./src/images/heart.png")}
           />
-        </CpnTHL>
+        </CpnTouchableHeightLightMultProps>
       </View>
 
       {/* NAV BAR */}
@@ -160,163 +191,3 @@ export default function App() {
     </View>
   );
 }
-
-const CpnTHL = ({ propsFn, propsText, children }) => (
-  <TouchableHighlight
-    style={[styles.thl, styles.touchShare]}
-    onPress={() => propsFn("touched THL CPN")}
-  >
-    <View style={[styles.iconTextBox]}>
-      {children}
-      <Text style={[styles.thlText, styles.touchShareText]}>{propsText}</Text>
-    </View>
-  </TouchableHighlight>
-);
-
-const CpnNavBar = ({ propsKeys, propsKey, propsFn }) => (
-  <View style={styles.navBar}>
-    {propsKeys.map((item) => (
-      <TouchableOpacity
-        key={item}
-        style={[styles.navBarItem]}
-        onPress={() => propsFn(item)}
-      >
-        <Text
-          style={[
-            styles.navBarItemText,
-            propsKey === item && styles.navBarItemTextOn,
-          ]}
-        >
-          {item}
-        </Text>
-      </TouchableOpacity>
-    ))}
-  </View>
-);
-
-const styles = StyleSheet.create({
-  // STRUCTURE
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    backgroundColor: "greenyellow",
-    backgroundColor: fnColor(50),
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  text: {
-    marginBottom: 5,
-    fontSize: 70,
-    color: "#fff",
-    width: "100%",
-    paddingLeft: "4%",
-    textAlign: "center",
-    textTransform: "uppercase",
-  },
-  // BUTTON 1
-  buttonView: {
-    backgroundColor: fnColor(70),
-    width: "48%",
-    height: 60,
-    borderRadius: 10,
-    paddingTop: 10,
-  },
-  button: {
-    margin: 20,
-    fontSize: 20,
-    height: 50,
-    padding: 20,
-    lineHeight: 2,
-    backgroundColor: "red",
-    border: "solid 2px #aaa",
-  },
-  // BUTTON 2 : TouchableHighlight & TouchableOpacity
-  touchShare: {
-    height: 60,
-    width: "48%",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  touchShareText: {
-    textAlign: "center",
-    fontSize: 20,
-  },
-  //
-  thl: {
-    backgroundColor: fnColor(40),
-  },
-  thlText: {
-    color: fnColor(100),
-  },
-  //
-  to: {
-    backgroundColor: fnColor(20),
-  },
-  toText: {
-    color: fnColor(80),
-  },
-  iconTextBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  icon: {
-    width: 20,
-    height: 20,
-    marginRight: 5,
-  },
-  // INPUT
-  txtIpt: {
-    color: fnColor(80),
-    width: 300,
-    height: 80,
-    borderWidth: 5,
-    borderColor: fnColor(70),
-    borderRadius: 20,
-    marginTop: 20,
-    marginBottom: 5,
-    paddingLeft: 30,
-    paddingRight: 30,
-    textAlign: "center",
-    fontSize: 20,
-  },
-  // COUNT
-  countBox: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    paddingLeft: "5%",
-    paddingRight: "5%",
-  },
-  // PAGE
-  page: {
-    flex: 13,
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    textAlign: "center",
-  },
-  // NAV BAR
-  navBar: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: fnColor(10),
-    width: "100%",
-  },
-  navBarItem: {
-    height: "100%",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  navBarItemText: {
-    fontSize: 14,
-    color: "#fff",
-  },
-  navBarItemTextOn: {
-    color: fnColor(50),
-  },
-});
