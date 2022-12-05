@@ -1,53 +1,75 @@
 import { StyleSheet } from "react-native";
-import fnColor from "./fnColor";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "greenyellow",
-    backgroundColor: fnColor(50),
+    backgroundColor: "",
     alignItems: "center",
     justifyContent: "center",
   },
-  text: {
-    marginBottom: 5,
-    fontSize: 70,
-    color: "#fff",
-    width: "100%",
-    paddingLeft: "4%",
-    textAlign: "center",
-    textTransform: "uppercase",
-  },
-  // INPUT
-  txtIpt: {
-    color: fnColor(80),
-    width: 300,
-    height: 80,
-    borderWidth: 5,
-    borderColor: fnColor(70),
-    borderRadius: 20,
-    marginTop: 20,
-    marginBottom: 5,
-    paddingLeft: 30,
-    paddingRight: 30,
-    textAlign: "center",
-    fontSize: 20,
-  },
-  // COUNT
-  countBox: {
+
+  // FLAT
+  item: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
-    paddingLeft: "5%",
-    paddingRight: "5%",
+    alignItems: "center",
+    borderTopWidth: 1,
+    borderColor: "#ccc",
+    padding: 20,
+    flex: 1,
   },
-  // PAGE
-  page: {
-    flex: 13,
+  itemPic: { flex: 4, height: 78 },
+  itemMain: { flex: 20, paddingLeft: 10 },
+  itemMainTitle: { fontSize: 18, fontWeight: "bold" },
+  itemMainContent: {
+    width: "100%",
+    color: "#555",
+  },
+
+  // FLAT COLLECT CHECKBOX
+  itemCheckBoxOuter: {
+    flex: 0,
+  },
+  itemCheckbox: {
+    width: 30,
+    height: 30,
+    marginLeft: 10,
+    borderRadius: 20,
+  },
+
+  // NO DATA BLOCK
+  noData: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "90%",
+    backgroundColor: "#BACECB",
+    marginTop: 20,
+    marginBottom: 20,
+    borderRadius: 20,
+  },
+  noDataText: {
+    fontSize: 20,
+  },
+
+  // TOUCHABLE BUTTON
+  touchButtonBox: {
+    flexDirection: "row",
+    justifyContent: "center",
+    paddingTop: 15,
+    paddingBottom: 15,
+    borderTopColor: "#ccc",
+    borderTopWidth: 1,
+    width: "100%",
+  },
+
+  touchButton: {
+    borderRadius: 18,
+    height: 50,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
-    textAlign: "center",
+    width: 170,
   },
 });
